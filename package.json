@@ -1,0 +1,19 @@
+{
+  "name": "Psub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha *test.js",
+    "test:watch": "mocha --watch *test.js ./psub.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  },
+  "dependencies": {
+    "object-hash": "^2.0.0",
+    "sinon": "^7.5.0"
+  }
+}
