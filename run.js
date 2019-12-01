@@ -3,8 +3,8 @@ const { Psub, EventBus } = require("./Psub");
 const eventBus = new EventBus();
 const psub = new Psub(eventBus);
 
-psub.subscribe("games", function(msg) {
-  console.log(msg);
+psub.subscribe("games", function(data) {
+  console.log(data.msg);
 });
 
 psub.publish("games", "red dead redemption");
