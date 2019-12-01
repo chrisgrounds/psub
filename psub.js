@@ -18,6 +18,7 @@ class Subscriber {
 class EventBus {
   constructor() {
     this.subscribers = [];
+    this.publishQueue = []; // TODO: Use this instead of immediate callback in post()
   }
 
   post(topic, msg) {
