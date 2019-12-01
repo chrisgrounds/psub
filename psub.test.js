@@ -1,12 +1,13 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const { Psub } = require("./psub");
+const { Psub, EventBus } = require("./psub");
 
 describe('Psub', function() {
   describe('publish sync', function() {
     it('calls subscriber for topic', function() {
-      const psub = new Psub();
+      const eventBus = new EventBus();
+      const psub = new Psub(eventBus);
       const topic = "news";
       const msg = "Atlantis found!"
       const handler = sinon.spy();
@@ -19,7 +20,8 @@ describe('Psub', function() {
     });
 
     it('calls subscriber for topic, multiple times', function() {
-      const psub = new Psub();
+      const eventBus = new EventBus();
+      const psub = new Psub(eventBus);
       const topic = "news";
       const msg = "Atlantis found!"
       const handler = sinon.spy();
@@ -35,7 +37,8 @@ describe('Psub', function() {
 
   describe('subscribe', function() {
     it('can subscribe to a topic', function() {
-      const psub = new Psub();
+      const eventBus = new EventBus();
+      const psub = new Psub(eventBus);
       const topic = "news";
       const handler = () => {};
 
@@ -48,7 +51,8 @@ describe('Psub', function() {
     });
 
     it('can subscribe multiple times to a topic', function() {
-      const psub = new Psub();
+      const eventBus = new EventBus();
+      const psub = new Psub(eventBus);
       const topic = "news";
       const handler = () => {};
 
@@ -62,7 +66,8 @@ describe('Psub', function() {
     });
 
     it('can subscribe to different topics', function() {
-      const psub = new Psub();
+      const eventBus = new EventBus();
+      const psub = new Psub(eventBus);
       const handler = () => {};
 
       psub.subscribe("news", handler);
@@ -77,7 +82,8 @@ describe('Psub', function() {
 
   describe('unsubscribe', function() {
     it('can unsubscribe from a topic', function() {
-      const psub = new Psub();
+      const eventBus = new EventBus();
+      const psub = new Psub(eventBus);
       const topic = "news";
       const handler = () => {};
 

@@ -15,34 +15,48 @@ class Subscriber {
   }
 }
 
-class Psub {
+class EventBus {
   constructor() {
     this.subscribers = [];
   }
 
-  get subscriptions() {
-    return this.subscribers;
-  }
-
-  _publish(topic, msg) {
+  post(topic, msg) {
     this.subscribers
       .filter(sub => sub.topic === topic)
       .forEach(sub => sub.callback({ msg })());
   }
 
-  publish(topic, msg, isSync = true) {
-    isSync
-      ? sync(() => this._publish(topic, msg))
-      : async(() => this._publish(topic, msg));
+  addSubscriber(sub) {
+    this.subscribers.push(sub);
   }
 
-  subscribe(topic, handler) {
-    this.subscribers.push(new Subscriber(topic, handler));
-  }
-
-  unsubscribe(topic) {
-    this.subscribers = this.subscribers.filter(sub => sub.topic !== topic);
+  removeSubscribersWithTopic(topic) {
+    this.subscribers = this.subscribers.filter(s => s.topic !== topic)
   }
 }
 
-module.exports = { Psub };
+class Psub {
+  constructor(eventBus) {
+    this.eventBus = eventBus;
+  }
+
+  get subscriptions() {
+    return this.eventBus.subscribers;
+  }
+
+  publish(topic, msg, isSync = true) {
+    isSync
+      ? sync(() => this.eventBus.post(topic, msg))
+      : async(() => this.eventBus.post(topic, msg));
+  }
+
+  subscribe(topic, handler) {
+    this.eventBus.addSubscriber(new Subscriber(topic, handler));
+  }
+
+  unsubscribe(topic) {
+    this.eventBus.removeSubscribersWithTopic(topic);
+  }
+}
+
+module.exports = { Psub, EventBus };
