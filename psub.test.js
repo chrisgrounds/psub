@@ -1,35 +1,35 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const { Psub, EventBus } = require("./psub");
+const { Psub } = require("./psub");
 
 describe('Psub', function() {
-  describe('publish sync', function() {
+  describe('call sync', function() {
     it('calls subscriber for topic', function() {
-      const eventBus = new EventBus();
+      const eventBus = [];
       const psub = new Psub(eventBus);
       const topic = "news";
       const msg = "Atlantis found!"
       const handler = sinon.spy();
 
       psub.subscribe(topic, handler);
-      psub.publish(topic, msg);
+      psub.call(topic, msg);
 
       sinon.assert.calledOnce(handler);
       sinon.assert.calledWith(handler, { topic: 'news', msg: 'Atlantis found!' });
     });
 
     it('calls subscriber for topic, multiple times', function() {
-      const eventBus = new EventBus();
+      const eventBus = [];
       const psub = new Psub(eventBus);
       const topic = "news";
       const msg = "Atlantis found!"
       const handler = sinon.spy();
 
       psub.subscribe(topic, handler);
-      psub.publish(topic, msg);
-      psub.publish(topic, msg);
-      psub.publish(topic, msg);
+      psub.call(topic, msg);
+      psub.call(topic, msg);
+      psub.call(topic, msg);
 
       sinon.assert.calledThrice(handler);
     });
@@ -37,7 +37,7 @@ describe('Psub', function() {
 
   describe('subscribe', function() {
     it('can subscribe to a topic', function() {
-      const eventBus = new EventBus();
+      const eventBus = [];
       const psub = new Psub(eventBus);
       const topic = "news";
       const handler = () => {};
@@ -51,7 +51,7 @@ describe('Psub', function() {
     });
 
     it('can subscribe multiple times to a topic', function() {
-      const eventBus = new EventBus();
+      const eventBus = [];
       const psub = new Psub(eventBus);
       const topic = "news";
       const handler = () => {};
@@ -66,7 +66,7 @@ describe('Psub', function() {
     });
 
     it('can subscribe to different topics', function() {
-      const eventBus = new EventBus();
+      const eventBus = [];
       const psub = new Psub(eventBus);
       const handler = () => {};
 
@@ -82,7 +82,7 @@ describe('Psub', function() {
 
   describe('unsubscribe', function() {
     it('can unsubscribe from a topic', function() {
-      const eventBus = new EventBus();
+      const eventBus = [];
       const psub = new Psub(eventBus);
       const topic = "news";
       const handler = () => {};
