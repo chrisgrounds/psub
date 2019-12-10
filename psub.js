@@ -27,15 +27,15 @@ class Psub {
   get subscriptions() {
     return this.eventBus.subscribers;
   }
+    
+  runAsSyncOrAsync(isSync, callback) {
+    isSync ? sync(callback) : async(callback);
+  }
   
   _publish(topic, msg) {
     this.subscribers
       .filter(sub => sub.topic === topic)
       .map(sub => this.eventBus.push({ msg, callback: sub.callback }));
-  }
-  
-  runAsSyncOrAsync(isSync, callback) {
-    isSync ? sync(callback) : async(callback);
   }
 
   publish(topic, msg, isSync = true) {
