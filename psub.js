@@ -15,49 +15,35 @@ class Subscriber {
   }
 }
 
-class EventBus {
-  constructor() {
-    this.subscribers = [];
-    this.publishQueue = []; // TODO: Use this instead of immediate callback in post()
-  }
-
-  post(topic, msg) {
-    this.subscribers
-      .filter(sub => sub.topic === topic)
-      .forEach(sub => sub.callback({ msg })());
-  }
-
-  addSubscriber(sub) {
-    this.subscribers.push(sub);
-  }
-
-  removeSubscribersWithTopic(topic) {
-    this.subscribers = this.subscribers.filter(s => s.topic !== topic)
-  }
-}
-
 class Psub {
   constructor(eventBus) {
+    this.subscribers = [];
     this.eventBus = eventBus;
   }
 
   get subscriptions() {
     return this.eventBus.subscribers;
   }
+  
+  _publish(topic, msg) {
+    this.subscribers
+      .filter(sub => sub.topic === topic)
+      .forEach(sub => this.eventBus.push({ msg, sub.callback }));
+  }
 
   publish(topic, msg, isSync = true) {
     isSync
-      ? sync(() => this.eventBus.post(topic, msg))
-      : async(() => this.eventBus.post(topic, msg));
+      ? sync(() => this._publish(topic, msg))
+      : async(() => this._publish(topic, msg));
   }
 
   subscribe(topic, handler) {
-    this.eventBus.addSubscriber(new Subscriber(topic, handler));
+    this.subscribers.push(new Subscriber(topic, handler));
   }
 
   unsubscribe(topic) {
-    this.eventBus.removeSubscribersWithTopic(topic);
+    this.subscribers = this.subscribers.filter(s => s.topic !== topic)
   }
 }
 
-module.exports = { Psub, EventBus };
+module.exports = { Psub };
