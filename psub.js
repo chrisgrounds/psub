@@ -39,6 +39,18 @@ class Psub {
       ? sync(() => this._publish(topic, msg))
       : async(() => this._publish(topic, msg));
   }
+  
+  _call(topic, msg) {
+    this.subscribers
+      .filter(sub => sub.topic === topic)
+      .forEach(sub => sub.callback({ msg })());
+  }
+  
+  call(topic, msg, isSync = true) {
+    isSync
+      ? sync(() => this._call(topic, msg))
+      : async(() => this._call(topic, msg));
+  }
 
   subscribe(topic, handler) {
     this.subscribers.push(new Subscriber(topic, handler));
