@@ -19,6 +19,9 @@ class Psub {
   constructor(eventBus) {
     this.subscribers = [];
     this.eventBus = eventBus;
+    if (typeof eventBus.push === "undefined") {
+      throw new Error("Psub constructor parameter does not implement push method");
+    }
   }
 
   get subscriptions() {
