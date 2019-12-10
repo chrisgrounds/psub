@@ -27,10 +27,6 @@ class Psub {
   get subscriptions() {
     return this.eventBus.subscribers;
   }
-    
-  runAsSyncOrAsync(isSync, callback) {
-    isSync ? sync(callback) : async(callback);
-  }
   
   _publish(topic, msg) {
     this.subscribers
@@ -38,8 +34,12 @@ class Psub {
       .map(sub => this.eventBus.push({ msg, callback: sub.callback }));
   }
 
-  publish(topic, msg, isSync = true) {
-    runAsSyncOrAsync(isSync, () => this._publish(topic, msg));
+  publish(topic, msg) {
+    async(() => this._publish(topic, msg));
+  }
+  
+  publishSync(topic, msg) {
+    sync(() => this._publish(topic, msg));
   }
   
   _call(topic, msg) {
@@ -48,8 +48,12 @@ class Psub {
       .forEach(sub => sub.callback({ msg })());
   }
   
-  call(topic, msg, isSync = true) {
-    runAsSyncOrAsync(isSync, () => this._call(topic, msg));
+  call(topic, msg) {
+    async(() => this._call(topic, msg));
+  }
+  
+  callSync(topic, msg) {
+    sync(() => this._call(topic, msg));
   }
 
   subscribe(topic, handler) {
