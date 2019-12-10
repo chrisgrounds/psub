@@ -33,11 +33,13 @@ class Psub {
       .filter(sub => sub.topic === topic)
       .map(sub => this.eventBus.push({ msg, callback: sub.callback }));
   }
+  
+  runAsSyncOrAsync(isSync, callback) {
+    isSync ? sync(callback) : async(callback);
+  }
 
   publish(topic, msg, isSync = true) {
-    isSync
-      ? sync(() => this._publish(topic, msg))
-      : async(() => this._publish(topic, msg));
+    runAsSyncOrAsync(isSync, () => this._publish(topic, msg));
   }
   
   _call(topic, msg) {
@@ -47,9 +49,7 @@ class Psub {
   }
   
   call(topic, msg, isSync = true) {
-    isSync
-      ? sync(() => this._call(topic, msg))
-      : async(() => this._call(topic, msg));
+    runAsSyncOrAsync(isSync, () => this._call(topic, msg));
   }
 
   subscribe(topic, handler) {
