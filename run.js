@@ -1,6 +1,6 @@
-const { Psub, EventBus } = require("./Psub");
+const { Psub } = require("./Psub");
 
-const eventBus = new EventBus();
+const eventBus = [];
 const psub = new Psub(eventBus);
 
 psub.subscribe("games", function(data) {
@@ -10,3 +10,5 @@ psub.subscribe("games", function(data) {
 psub.publish("games", "red dead redemption");
 psub.publish("games", "red dead redemption 2", false);
 psub.publish("games", "outer worlds");
+
+psub.eventBus.map(o => o.callback({ o.msg }));
