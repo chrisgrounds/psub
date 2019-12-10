@@ -28,7 +28,7 @@ class Psub {
   _publish(topic, msg) {
     this.subscribers
       .filter(sub => sub.topic === topic)
-      .map(sub => this.eventBus.push({ msg, sub.callback }));
+      .map(sub => this.eventBus.push({ msg, callback: sub.callback }));
   }
 
   publish(topic, msg, isSync = true) {
