@@ -41,6 +41,7 @@ class Psub {
     this.subscribers.push(new Subscriber(topic, handler));
   }
 
+  // TODO: Add ability to unsubscribe specific subscriber
   unsubscribe(topic) {
     this.subscribers = this.subscribers.filter(s => s.topic !== topic)
   }
